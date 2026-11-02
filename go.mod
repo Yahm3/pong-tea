@@ -2,7 +2,11 @@ module pong-tea
 
 go 1.26.0
 
-require charm.land/bubbletea/v2 v2.1.0
+require (
+	charm.land/bubbletea/v2 v2.1.0
+	charm.land/lipgloss/v2 v2.0.6
+	github.com/charmbracelet/x/exp/charmtone v0.1.1
+)
 
 require (
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
