@@ -5,7 +5,7 @@ We are probing an interesting library that we found in the internet :)
 ## Installation:
 
 ```bash
-git clone https://Yahm3/pong-tea.git
+git clone https://github.com/Yahm3/pong-tea.git
 cd pong-tea
 ```
 > install dependencies
