@@ -9,6 +9,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/gopxl/beep"
+	"github.com/gopxl/beep/speaker"
+	"github.com/gopxl/beep/v2/mp3"
 )
 
 const (
@@ -62,7 +65,24 @@ func (m model) Init() tea.Cmd { return tick(startDelay) }
 func clamp(v, lo, hi int) int { return max(lo, min(v, hi)) }
 
 func hit(ballY, paddleTop int) bool {
-	return ballY >= paddleTop && ballY < paddleTop+paddleH
+	hit := false
+	if ballY >= paddleTop && ballY < paddleTop+paddleH {
+		f, err := os.Open("hit.mp3")
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error: ", err)
+		}
+
+		streamer, format, err := mp3.Decode(f)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error: ", err)
+		}
+
+		defer streamer.Close()
+		speaker.Init(beep.SampleRate(format.SampleRate), format.SampleRate.N(time.Second/10))
+		speaker.PlayAndWait(streamer)
+		hit = true
+	}
+	return hit
 }
 
 func (m model) step() model {
@@ -189,6 +209,7 @@ func main() {
 }
 
 //:References:
+//https://github.com/gopxl/beep/wiki/Hello,-Beep!
 //https://github.com/charmbracelet/bubbletea/discussions/307
 //https://github.com/charmbracelet/bubbletea/tree/main/examples/fullscreen
 //https://golangdocs.com/concatenate-strings-in-golang
